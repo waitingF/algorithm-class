@@ -38,44 +38,6 @@ public:
             min_heap.push(max_heap.top());
             max_heap.pop();
         }
-//        if (min_heap.size() == 0) {
-//            min_heap.push(num_to_insert);
-//            return;
-//        } else if (max_heap.size() == 0) {
-//            if (min_heap.top() < num_to_insert) {
-//                int num_to_trans = min_heap.top();
-//                min_heap.pop();
-//                max_heap.push(num_to_trans);
-//                min_heap.push(num_to_insert);
-//                return;
-//            }
-//            max_heap.push(num_to_insert);
-//            return;
-//        }
-//    
-//        if (num_to_insert > min_heap.top()) {// 应该将num_to_insert插入min_heap，在对两个堆的大小做调整
-//            min_heap.push(num_to_insert);
-//            if (min_heap.size() > max_heap.size()+1) {
-//                int num_to_trans = min_heap.top();
-//                min_heap.pop();
-//                max_heap.push(num_to_trans);
-//            }
-//        } else if (num_to_insert < max_heap.top()) {
-//            max_heap.push(num_to_insert);
-//            if (max_heap.size() > min_heap.size()+1) {
-//                int num_to_trans = max_heap.top();
-//                max_heap.pop();
-//                min_heap.push(num_to_trans);
-//            }
-//        } else {// 此时插入两堆中个数少的一个，两堆大小相等，则随便插入一个
-//            if (min_heap.size() < max_heap.size()) {
-//                min_heap.push(num_to_insert);
-//            } else if (min_heap.size() > max_heap.size()) {
-//                max_heap.push(num_to_insert);
-//            } else {
-//                min_heap.push(num_to_insert);
-//            }
-//        }
     }
     
     int Query() {
