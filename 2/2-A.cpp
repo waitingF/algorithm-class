@@ -27,11 +27,10 @@ public:
     int size;
     
     MyStruct() {
-        size = 0;
     }
     
     void Insert(int num_to_insert) {
-        min_heap.push(num_to_insert);
+    	min_heap.push(num_to_insert);
         max_heap.push(min_heap.top());
         min_heap.pop();
         if (min_heap.size() < max_heap.size()) {
@@ -63,28 +62,25 @@ public:
 
 int main(){
     int T;
-    cin >> T;
+	scanf("%d", &T);
     while(T--) {
         MyStruct myStruct;
         int N;
-        cin >> N;
+		scanf("%d", &N);
         while(N--) {
             char opration_type;
-            cin >> opration_type;
+			scanf(" %c", &opration_type);
             switch(opration_type) {
             case 'I':
                 int num;
-                cin >> num;
+				scanf("%d", &num);
                 myStruct.Insert(num);
-//                cout << "min heap size " << myStruct.min_heap.size() << "\tmax heap size " << myStruct.max_heap.size() <<  endl;
                 break;
             case 'Q':
-                cout << myStruct.Query() << endl;
-//                cout << "min heap size " << myStruct.min_heap.size() << "\tmax heap size " << myStruct.max_heap.size() <<  endl;
+				printf("%d\n", myStruct.Query());
                 break;
             case 'D':
                 myStruct.Delete();
-//                cout << "min heap size " << myStruct.min_heap.size() << "\tmax heap size " << myStruct.max_heap.size() <<  endl;
                 break;
             }
         }
