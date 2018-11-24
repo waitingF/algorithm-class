@@ -24,70 +24,76 @@ A:平面最近点对
 
 #include<iostream>
 #include<algorithm>
+#include<vector>
 #include<math.h>
 using namespace std;
 
 const double INF = 1e10;
-const int N = 10005;
+const int N = 1e5 + 4;
 
 class Point {
 	public:
 		int x;
 		int y;
 };
-double computeDistance(const Point& A, const Point& B) {
-	return sqrt( pow(A.x-B.x, 2) + pow(A.y-B.y, 2) );
-}
 bool sortByX(const Point& A, const Point& B) {
 	return A.x < B.x;
 }
-bool sortByY(const Point& A, const Point& B) {
-	return A.y < B.y;
-}
 
-Point points[N];
+Point pointsX[N];
 Point backup[N];
-Point pointsSortByY[N];
 double minDistance = INF;
 int n;
 
-double divideConquerFind(int l, int r) {
-	if(r==l) {
+double divideConquerFind(Point Px[], int n) {
+	if(n <= 1) {
 		return INF;
 	}
-	int mid = (l+r) / 2;
-	double leftMin = divideConquerFind(l, mid);
-	double rightMin = divideConquerFind(mid+1, r);
-	double min = leftMin < rightMin ? leftMin : rightMin;
+	int mid = n / 2;
+	Point midPoint = Px[mid];
 	
-	int i=l, j=mid+1, idx=l;
-	while(i<=mid && j<=r) {
-		if(points[i].y > points[j].y) {
-			pointsSortByY[idx++] = points[j++];
+	double leftMin = divideConquerFind(Px, mid);
+	double rightMin = divideConquerFind(Px+mid, n-mid);
+	double minDis = min(leftMin, rightMin);
+	
+	// 归并按y排序
+	int i=0, j=mid;
+	Point tmp[n+1];
+	int k=0;
+	while(i<mid && j<n) {
+		if(Px[i].y <= Px[j].y) {
+			tmp[k++] = Px[i++];
 		} else {
-			pointsSortByY[idx++] = points[i++];
+			tmp[k++] = Px[j++];	
 		}
 	}
-	while(i<=mid) {
-		pointsSortByY[idx++] = points[i++];
-	} 
-	while(l<=r) {
-		pointsSortByY[idx++] = points[j++];
+	while(i<mid) {
+		tmp[k++] = Px[i++];
+	}
+	while(j<n) {
+		tmp[k++] = Px[j++];	
+	}
+	for(i=0; i<n; i++) {
+		Px[i] = tmp[i];
 	}
 	
-	for(i=l; i<=r; i++) {
-		for(j=1; j<6&&(i+j)<=r; j++) {
-			min = min < computeDistance(pointsSortByY[i], pointsSortByY[i+j]) ? min : computeDistance(pointsSortByY[i], pointsSortByY[i+j]); 
-		} 
-		for(j=1; j<6&&(i-j)>=l; j++) {
-			min = min < computeDistance(pointsSortByY[i], pointsSortByY[i-j]) ? min : computeDistance(pointsSortByY[i], pointsSortByY[i-j]); 
+	vector<Point> b;
+	for(i=0; i<n; i++) {
+		if(fabs(Px[i].x - midPoint.x) >= minDis){
+			continue;
 		}
+		for(j=0; j<b.size(); j++) {
+			double dx = Px[i].x - b[b.size()-j-1].x;
+			double dy = Px[i].y - b[b.size()-j-1].y;
+//			if(dy >= minDis) {
+//				continue;
+//			}
+			minDis = min(minDis, sqrt(dx*dx + dy*dy));
+		}
+		b.push_back(Px[i]);
 	}
 	
-	for(int k=l; k<=r; k++) {
-		points[k] = pointsSortByY[k];
-	}
-	return min;
+	return minDis;
 }
 
 
@@ -99,11 +105,11 @@ int main() {
 		for(int i=0; i<n; i++) {
 			int x, y;
 			scanf("%d %d", &x, &y);
-			points[i].x = x;
-			points[i].y = y;
+			pointsX[i].x = x;
+			pointsX[i].y = y;
 		}
-		sort(points, points+n, sortByX);
-		printf("%.6lf\n", divideConquerFind(0, n-1));
+		sort(pointsX, pointsX+n, sortByX);
+		printf("%.6lf\n", divideConquerFind(pointsX, n));
 	}
 	return 0;
 }
